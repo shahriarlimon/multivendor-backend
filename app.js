@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require("body-parser")
-const ErrorHandler = require('./utils/ErrorHandler');
+const ErrorHandler = require('./middlewares/error');
 const app = express()
 const cookieParser = require("cookie-parser");
 /* const fileUpload = require("express-fileupload") */
@@ -22,9 +22,14 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 if (process.env.NODE_ENV !== "PRODUCTION") {
     require("dotenv").config({ path: "backend/config/.env" })
 }
+
 /* importing routes */
 const user = require("./controllers/user");
+const shop = require("./controllers/shop");
+const product = require("./controllers/product")
 app.use('/api/v2/user', user)
+app.use('/api/v2/shop', shop)
+app.use('/api/v2/product', product)
 /* error handling */
 app.use(ErrorHandler)
 

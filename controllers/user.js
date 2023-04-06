@@ -9,6 +9,17 @@ const ErrorHandler = require('../utils/ErrorHandler');
 const { upload } = require('../multer.js');
 const sendMail = require('../utils/sendMail.js');
 const { sendToken } = require('../utils/sendToken.js');
+const { isAuthenticated } = require('../middlewares/auth.js');
+router.post("/login-user", catchAsyncError(async (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password) return next(new ErrorHandler("Please provide all the fields", 400));
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) return next(new ErrorHandler("User doesn't exist", 400));
+    const passwordMatched = await user.comparePassword(password);
+    if (!passwordMatched) return (next(new ErrorHandler("Please provide correct information", 400)));
+    sendToken(user, 201, res)
+
+}))
 router.post("/create-user", upload.single("avatar"), async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
@@ -52,9 +63,6 @@ router.post("/create-user", upload.single("avatar"), async (req, res, next) => {
         }
 
 
-
-
-
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
     }
@@ -79,6 +87,37 @@ router.post("/activation", catchAsyncError(async (req, res, next) => {
         sendToken(newUser, 201, res)
     } catch (error) {
         return next(new ErrorHandler(error.message, 400));
+    }
+}))
+
+/* load user */
+router.get("/getuser", isAuthenticated, catchAsyncError(async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return next(new ErrorHandler("User doesn't exist", 404));
+        res.status(200).json({
+            success: true,
+            user
+        })
+
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+}))
+
+/* logout user */
+router.get("/logout", isAuthenticated, catchAsyncError(async (req, res, next) => {
+    try {
+        res.cookie("token", null, {
+            expires: new Date(Date.now()),
+            httpOnly: true
+        })
+        res.status(201).json({
+            success: true,
+            message: "Logout successful"
+        })
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
     }
 }))
 
