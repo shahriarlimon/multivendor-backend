@@ -1,18 +1,30 @@
 const mongoose = require("mongoose");
 
 
-const productSchema = new mongoose.Schema({
+const eventSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, "Please enter your product name!"],
+        required: [true, "Please enter your event product name!"],
     },
     description: {
         type: String,
-        required: [true, "Please enter your product description!"],
+        required: [true, "Please enter your event product description!"],
     },
     category: {
         type: String,
-        required: [true, "Please enter your product category!"],
+        required: [true, "Please enter your event product category!"],
+    },
+    start_date: {
+        type: Date,
+        required: true
+    },
+    finish_date: {
+        type: Date,
+        required: true
+    },
+    status: {
+        type: String,
+        default: "Running"
     },
     tags: {
         type: String,
@@ -31,25 +43,13 @@ const productSchema = new mongoose.Schema({
     images: [{
         type: String
     }],
-    reviews: [{
-        user: { type: Object },
-        rating: { type: Number },
-        comment: { type: String },
-        productId: { type: String },
-        createdAt: {
-            type: Date,
-            default: Date.now()
-        }
-    }],
-    ratings: {
-        type: Number
-    },
     shopId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Shop',
         required: true
     },
     shop: {
-        type: Object,
+        type: String,
         required: true
     },
     sold_out: {
@@ -66,4 +66,4 @@ const productSchema = new mongoose.Schema({
 
 
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Event", eventSchema);

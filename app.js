@@ -24,12 +24,30 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 }
 
 /* importing routes */
+
 const user = require("./controllers/user");
 const shop = require("./controllers/shop");
-const product = require("./controllers/product")
+const product = require("./controllers/product");
+const event = require("./controllers/event");
+const coupon = require("./controllers/coupon");
+const payment = require("./controllers/payment")
+const order = require("./controllers/order");
+const conversation = require("./controllers/conversation")
+const messages = require("./controllers/messages")
+
+
 app.use('/api/v2/user', user)
+app.use("/api/v2/order", order)
 app.use('/api/v2/shop', shop)
 app.use('/api/v2/product', product)
+app.use('/api/v2/event', event)
+app.use('/api/v2/coupon', coupon)
+app.use("/api/v2/payment", payment)
+app.use("/api/v2/conversation", conversation)
+app.use("/api/v2/messages", messages)
+
+
+
 /* error handling */
 app.use(ErrorHandler)
 
