@@ -47,7 +47,7 @@ router.post(
 
 // get all withdraws --- admnin
 
-router.get(
+/* router.get(
   "/get-all-withdraw-request",
   isAuthenticated,
   isAdmin("Admin"),
@@ -105,7 +105,7 @@ router.put(
       } catch (error) {
         return next(new ErrorHandler(error.message, 500));
       }
-      res.status(201).json({
+      res.status(201).json({ 
         success: true,
         withdraw,
       });
@@ -113,6 +113,6 @@ router.put(
       return next(new ErrorHandler(error.message, 500));
     }
   })
-);
+); */
 
 module.exports = router;

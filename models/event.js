@@ -49,7 +49,7 @@ const eventSchema = new mongoose.Schema({
         required: true
     },
     shop: {
-        type: String,
+        type: Object,
         required: true
     },
     sold_out: {
