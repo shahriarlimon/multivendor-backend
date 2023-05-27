@@ -46,7 +46,7 @@ router.post("/create-user", upload.single("avatar"), async (req, res, next) => {
             avatar: fileUrl,
         };
         const activationToken = createActivationToken(user)
-        const activationURL = `http://localhost:3000/activation/${activationToken}`;
+        const activationURL = `https://e-shop-35f19-e7e98.web.app/activation/${activationToken}`;
         try {
             await sendMail({
                 email: user.email,
